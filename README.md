@@ -41,6 +41,10 @@ cd producer
 dapr run --app-id producer dotnet run
 ```
 
+### Uninstall Kafka
+
+WIP.
+
 ## Run in Kubernetes cluster
 
 ### Setting up a Kafka in Kubernetes
@@ -69,6 +73,8 @@ dapr-kafka-zookeeper-2   1/1     Running   0          109s
 dapr init --kubernetes
 ```
 
+TODO: add how to install dapr using helm
+
 5. Deploy the producer and consumer applications to Kubernetes
 ```
 kubectl apply -f ./deploy/kafka-pubsub.yaml
@@ -81,3 +87,7 @@ kubectl apply -f ./deploy/consumer.yaml
 kubectl logs -f producer-567bf6fbfd-42zjf producer
 kubectl logs -f consumer-bcd4bb7b4-k2pvt consumer
 ```
+
+## Build and push docker image
+
+WIP.
