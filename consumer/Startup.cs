@@ -47,12 +47,10 @@ namespace Dapr.Examples.Pubsub.Consumer
             app.UseCloudEvents();
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapPost("sampletopic", this.SubscribeMessage).WithTopic("sampletopic");
+                endpoints.MapPost("sampletopic", this.ConsumeMessagae).WithTopic("sampletopic");
             });
         }
-
-        // Receive a "Post" object from the previous app in the pipeline.
-        private async Task SubscribeMessage(HttpContext context)
+        private async Task ConsumeMessagae(HttpContext context)
         {
             Console.WriteLine($"Message is delivered.");
 
