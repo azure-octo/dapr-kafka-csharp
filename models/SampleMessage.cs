@@ -2,9 +2,9 @@
 
 namespace Dapr.Examples.Pubsub.Models
 {
-    public class SocialMediaMessage
+    public class SampleMessage
     {
-        public SocialMediaMessage() { }
+        public SampleMessage() { }
         public Guid CorrelationId { get; set; }
         public Guid MessageId { get; set; }
         public string Message { get; set; }

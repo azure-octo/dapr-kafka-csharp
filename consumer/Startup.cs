@@ -48,15 +48,15 @@ namespace Dapr.Examples.Pubsub.Consumer
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapSubscribeHandler();
-                endpoints.MapPost("sampletopic", this.ConsumeMessagae).WithTopic("sampletopic");
+                endpoints.MapPost("sampletopic", this.ConsumeMessage).WithTopic("sampletopic");
             });
         }
-        private async Task ConsumeMessagae(HttpContext context)
+        private async Task ConsumeMessage(HttpContext context)
         {
             Console.WriteLine($"Message is delivered.");
 
             var client = context.RequestServices.GetRequiredService<DaprClient>();
-            var message = await JsonSerializer.DeserializeAsync<SocialMediaMessage>(context.Request.Body, serializerOptions);
+            var message = await JsonSerializer.DeserializeAsync<SampleMessage>(context.Request.Body, serializerOptions);
 
             Console.WriteLine($"message id: {message.MessageId}");
             Console.WriteLine($"message context: {message.Message}");

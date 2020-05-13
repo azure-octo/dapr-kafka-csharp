@@ -8,43 +8,14 @@ namespace producer
 {
     class Program
     {
-        private static readonly Gauge PublishCallTime = Metrics.CreateGauge("lh_feed_generator_publish_call_time", "The time it takes for the publish call to return");
-        private static readonly Counter PublishFailureCount = Metrics.CreateCounter("lh_feed_generator_publish_failure_count", "Publich calls that throw");        
-
-        // This uses the names of shapes for a generic theme
-        static internal string[] HashTags = new string[]
-        {
-            "circle",
-            "ellipse",
-            "square",
-            "rectangle",
-            "triangle",
-            "star",
-            "cardioid",
-            "epicycloid",
-            "limocon",
-            "hypocycoid"
-        };
-
         static async Task Main(string[] args)
         {
             int delayInMilliseconds = 10000;
-            if (args.Length != 0 && args[0] != "%LAUNCHER_ARGS%")
-            {
-                if (int.TryParse(args[0], out delayInMilliseconds) == false)
-                {
-                    string msg = "Could not parse delay";
-                    Console.WriteLine(msg);
-                    throw new InvalidOperationException(msg);
-                }
-            }
-
             await StartMessageGeneratorAsync(delayInMilliseconds);
         }
 
         static async Task StartMessageGeneratorAsync(int delayInMilliseconds)
         {
-            const string PubsubTopicName = "sampletopic";
             TimeSpan delay = TimeSpan.FromMilliseconds(delayInMilliseconds);
 
             DaprClientBuilder daprClientBuilder = new DaprClientBuilder();
@@ -52,39 +23,29 @@ namespace producer
 
             while (true)
             {
-                SocialMediaMessage message = GeneratePost();
-
+                var message = GenerateMessage();
+                Console.WriteLine("Publishing: {0}", message);
                 try
                 {
-                    using (PublishCallTime.NewTimer())
-                    {
-                        Console.WriteLine("Publishing: {0}", message);
-                        await client.PublishEventAsync<SocialMediaMessage>(PubsubTopicName, message);
-                    }
+                    await client.PublishEventAsync<SampleMessage>("sampletopic", message);
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
-                    Console.WriteLine("Caught {0}", e.ToString());
-                    PublishFailureCount.Inc();
+                    Console.WriteLine(ex);
                 }
 
                 await Task.Delay(delay);
             }
         }
 
-        static internal SocialMediaMessage GeneratePost()
+        static internal SampleMessage GenerateMessage()
         {
-            Guid correlationId = Guid.NewGuid();
-            Guid messageId = Guid.NewGuid();
-            string message = GenerateRandomMessage();
-            DateTime creationDate = DateTime.UtcNow;
-
-            return new SocialMediaMessage()
+            return new SampleMessage()
             {
-                CorrelationId = correlationId,
-                MessageId = messageId,
-                Message = message,
-                CreationDate = creationDate,
+                CorrelationId = Guid.NewGuid(),
+                MessageId = Guid.NewGuid(),
+                Message = GenerateRandomMessage(),
+                CreationDate = DateTime.UtcNow,
                 PreviousAppTimestamp = DateTime.UtcNow
             };
         }
@@ -92,8 +53,21 @@ namespace producer
         static internal string GenerateRandomMessage()
         {
             Random random = new Random();
-            int length = random.Next(5, 10);
+            var HashTags = new string[]
+            {
+                "circle",
+                "ellipse",
+                "square",
+                "rectangle",
+                "triangle",
+                "star",
+                "cardioid",
+                "epicycloid",
+                "limocon",
+                "hypocycoid"
+            };
 
+            int length = random.Next(5, 10);
             string s = "";
             for (int i = 0; i < length; i++)
             {
@@ -101,8 +75,6 @@ namespace producer
                 char c = (char)('a' + j);
                 s += c;
             }
-
-            // add hashtag
             s += " #";
             s += HashTags[random.Next(HashTags.Length)];
             return s;
