@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace consumer
+namespace Dapr.Examples.Pubsub.Consumer
 {
     public class Program
     {
