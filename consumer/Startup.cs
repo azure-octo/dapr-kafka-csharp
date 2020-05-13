@@ -47,7 +47,6 @@ namespace Dapr.Examples.Pubsub.Consumer
             app.UseCloudEvents();
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers();
                 endpoints.MapPost("sampletopic", this.SubscribeMessage).WithTopic("sampletopic");
             });
         }
