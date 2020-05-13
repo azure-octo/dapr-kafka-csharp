@@ -59,7 +59,7 @@ $ helm install dapr-kafka incubator/kafka -f ./kafka-non-persistence.yaml
 
 3. Wait until kafka pods are running
 ```
-$ kubectl -n kafka get pods -w
+$ kubectl get pods -w
 NAME                     READY   STATUS    RESTARTS   AGE
 dapr-kafka-0             1/1     Running   0          2m7s
 dapr-kafka-zookeeper-0   1/1     Running   0          2m57s
