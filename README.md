@@ -50,12 +50,12 @@ dapr run --app-id producer dotnet run
 $ helm repo add incubator http://storage.googleapis.com/kubernetes-charts-incubator
 $ helm repo update
 $ kubectl create ns kafka
-$ helm install dapr-kafka incubator/kafka -f ./kafka-non-persistence.yaml
+$ helm install dapr-kafka incubator/kafka -n kafka -f ./kafka-non-persistence.yaml
 ```
 
 3. Wait until kafka pods are running
 ```
-$ kubectl get pods -w
+$ kubectl get pods -n kafka -w
 NAME                     READY   STATUS    RESTARTS   AGE
 dapr-kafka-0             1/1     Running   0          2m7s
 dapr-kafka-zookeeper-0   1/1     Running   0          2m57s
