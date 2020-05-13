@@ -26,7 +26,7 @@ namespace producer
             "hypocycoid"
         };
 
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
             int delayInMilliseconds = 10000;
             if (args.Length != 0 && args[0] != "%LAUNCHER_ARGS%")
@@ -39,25 +39,26 @@ namespace producer
                 }
             }
 
-            Task.Run(() => StartMessageGeneratorAsync(delayInMilliseconds));
+            await StartMessageGeneratorAsync(delayInMilliseconds);
         }
 
-        static internal async void StartMessageGeneratorAsync(int delayInMilliseconds)
+        static async Task StartMessageGeneratorAsync(int delayInMilliseconds)
         {
             const string PubsubTopicName = "sampletopic";
             TimeSpan delay = TimeSpan.FromMilliseconds(delayInMilliseconds);
 
             DaprClientBuilder daprClientBuilder = new DaprClientBuilder();
             DaprClient client = daprClientBuilder.Build();
+
             while (true)
             {
                 SocialMediaMessage message = GeneratePost();
 
                 try
                 {
-                    Console.WriteLine("Publishing");
                     using (PublishCallTime.NewTimer())
                     {
+                        Console.WriteLine("Publishing: {0}", message);
                         await client.PublishEventAsync<SocialMediaMessage>(PubsubTopicName, message);
                     }
                 }
