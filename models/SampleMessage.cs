@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace Dapr.Examples.Pubsub.Models
+﻿namespace Dapr.Examples.Pubsub.Models
 {
+    using System;
+
     public class SampleMessage
     {
         public SampleMessage() { }
