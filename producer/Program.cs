@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Prometheus;
 using Dapr.Client;
+using Dapr.Examples.Pubsub.Models;
 
 namespace producer
 {
