@@ -5,7 +5,8 @@
 1. Install [Docker](https://www.docker.com/products/docker-desktop)
 2. Install [.Net Core SDK 3.1](https://dotnet.microsoft.com/download)
 3. Install [Dapr CLI](https://github.com/dapr/cli)
-4. Clone the git repository to download the sample
+4. Clone the sample repo
+
 ```
 git clone https://github.com/azure-octo/dapr-kafka-csharp.git
 ```
@@ -16,7 +17,7 @@ git clone https://github.com/azure-octo/dapr-kafka-csharp.git
 
 In order to run the Kafka bindings sample locally, you will run the [Kafka broker server](https://github.com/wurstmeister/kafka-docker) in a docker container on your machine.
 
-1. Run `docker-compose -f ./docker-compose-single-kafka.yml up -d` to run the container locally
+1. Run `docker-compose -f ./docker-compose-kafka.yml up -d` to run the container locally
 2. Run `docker ps` to see the container running locally: 
 
 ```bash
