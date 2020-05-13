@@ -1,0 +1,42 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: consumer
+  labels:
+    app: dotnet
+spec:
+  selector:
+    app: dotnet
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 6000
+  type: LoadBalancer
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: consumer
+  labels:
+    app: dotnet
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dotnet
+  template:
+    metadata:
+      labels:
+        app: dotnet
+      annotations:
+        dapr.io/enabled: "true"
+        dapr.io/id: "consumer"
+        dapr.io/port: "6000"
+    spec:
+      containers:
+      - name: dotnet
+        image: youngp/consumer:latest
+        ports:
+        - containerPort: 6000
+        imagePullPolicy: Always
