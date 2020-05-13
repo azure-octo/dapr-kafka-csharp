@@ -11,9 +11,6 @@ git clone https://github.com/azure-octo/dapr-kafka-csharp.git
 2. Install docker
 3. Install .NET
 
-1. Running the sample locally on your machine using Redis pub-sub
-a. Open a terminal window
-
 ## Running locally
 
 ### Run Kafka Docker Container Locally
@@ -67,3 +64,19 @@ dapr-kafka-zookeeper-1   1/1     Running   0          2m13s
 dapr-kafka-zookeeper-2   1/1     Running   0          109s
 ```
 
+4. Run Dapr in Kubernetes environment
+```
+dapr init --kubernetes
+```
+
+5. Deploy the producer and consumer applications to Kubernetes
+```
+kubectl apply -f ./deploy/producer.yaml
+kubectl apply -f ./deploy/consumer.yaml
+```
+
+6. Check the logs from producer and consumer:
+```
+kubectl logs -f producer-567bf6fbfd-42zjf producer
+kubectl logs -f consumer-bcd4bb7b4-k2pvt consumer
+```
