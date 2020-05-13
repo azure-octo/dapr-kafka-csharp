@@ -1,41 +1,25 @@
-kind: Service
-apiVersion: v1
-metadata:
-  name: producer
-  labels:
-    app: dotnet
-spec:
-  selector:
-    app: dotnet
-  ports:
-  - protocol: TCP
-    port: 80
-    targetPort: 3000
-  type: LoadBalancer
-
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: producer
   labels:
-    app: dotnet
+    app: producer
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: dotnet
+      app: producer
   template:
     metadata:
       labels:
-        app: dotnet
+        app: producer
       annotations:
         dapr.io/enabled: "true"
         dapr.io/id: "producer"
-        dapr.io/port: "3000"
+        dapr.io/protocol: "grpc"
     spec:
       containers:
-      - name: dotnet
+      - name: producer
         image: youngp/producer:latest
         ports:
         - containerPort: 3000

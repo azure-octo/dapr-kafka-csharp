@@ -9,7 +9,7 @@ spec:
       # Kafka broker connection setting
     - name: brokers
       # Comma separated list of kafka brokers
-      value: "dapr-kafka.default.svc.cluster.local:9092"
+      value: "dapr-kafka.kafka.svc.cluster.local:9092"
       # Enable auth. Default is "false"
     - name: authRequired
       value: "false"

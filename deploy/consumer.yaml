@@ -3,10 +3,10 @@ apiVersion: v1
 metadata:
   name: consumer
   labels:
-    app: dotnet
+    app: consumer
 spec:
   selector:
-    app: dotnet
+    app: consumer
   ports:
   - protocol: TCP
     port: 80
@@ -19,23 +19,23 @@ kind: Deployment
 metadata:
   name: consumer
   labels:
-    app: dotnet
+    app: consumer
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: dotnet
+      app: consumer
   template:
     metadata:
       labels:
-        app: dotnet
+        app: consumer
       annotations:
         dapr.io/enabled: "true"
         dapr.io/id: "consumer"
         dapr.io/port: "6000"
     spec:
       containers:
-      - name: dotnet
+      - name: consumer
         image: youngp/consumer:latest
         ports:
         - containerPort: 6000
