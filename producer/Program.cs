@@ -4,27 +4,25 @@ using Prometheus;
 using Dapr.Client;
 using Dapr.Examples.Pubsub.Models;
 
-namespace producer
+namespace Dapr.Examples.Pubsub.Producer
 {
     class Program
     {
         static async Task Main(string[] args)
         {
-            int delayInMilliseconds = 10000;
-            await StartMessageGeneratorAsync(delayInMilliseconds);
+            await StartMessageGeneratorAsync();
         }
 
-        static async Task StartMessageGeneratorAsync(int delayInMilliseconds)
+        static async Task StartMessageGeneratorAsync()
         {
-            TimeSpan delay = TimeSpan.FromMilliseconds(delayInMilliseconds);
-
             DaprClientBuilder daprClientBuilder = new DaprClientBuilder();
             DaprClient client = daprClientBuilder.Build();
 
             while (true)
             {
-                var message = GenerateMessage();
+                var message = GenerateNewMessage();
                 Console.WriteLine("Publishing: {0}", message);
+
                 try
                 {
                     await client.PublishEventAsync<SampleMessage>("sampletopic", message);
@@ -34,11 +32,12 @@ namespace producer
                     Console.WriteLine(ex);
                 }
 
-                await Task.Delay(delay);
+                // Delay 10 seconds
+                await Task.Delay(TimeSpan.FromSeconds(10.0));
             }
         }
 
-        static internal SampleMessage GenerateMessage()
+        static internal SampleMessage GenerateNewMessage()
         {
             return new SampleMessage()
             {
@@ -75,8 +74,7 @@ namespace producer
                 char c = (char)('a' + j);
                 s += c;
             }
-            s += " #";
-            s += HashTags[random.Next(HashTags.Length)];
+            s += " #" + HashTags[random.Next(HashTags.Length)];
             return s;
         }
     }

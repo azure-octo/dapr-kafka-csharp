@@ -31,6 +31,7 @@ namespace Dapr.Examples.Pubsub.Consumer
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Enable Dapr Client
             services.AddDaprClient();
             services.AddSingleton(serializerOptions);
         }
@@ -44,16 +45,24 @@ namespace Dapr.Examples.Pubsub.Consumer
             }
 
             app.UseRouting();
+
+            // Enable Cloud Event Middleware to unwrap cloud event payload
             app.UseCloudEvents();
+            
             app.UseEndpoints(endpoints =>
             {
+                // Register Subscribe Handlers
                 endpoints.MapSubscribeHandler();
+
+                // Register the delegate to consume the messages from "sampletopic" topic
                 endpoints.MapPost("sampletopic", this.ConsumeMessage).WithTopic("sampletopic");
             });
         }
+
+        // ConsumeMessage subscribes the message from Producer.
         private async Task ConsumeMessage(HttpContext context)
         {
-            Console.WriteLine($"Message is delivered.");
+            Console.WriteLine("Message is delivered.");
 
             var client = context.RequestServices.GetRequiredService<DaprClient>();
             var message = await JsonSerializer.DeserializeAsync<SampleMessage>(context.Request.Body, serializerOptions);
