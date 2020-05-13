@@ -1,15 +1,14 @@
 # Producer and Consumer examples using Dapr Pubsub
 
-Instructions to run the sample
-
 ## Pre-requisites
 
-1. Clone the git repository to download the sample
+1. Install [Docker](https://www.docker.com/products/docker-desktop)
+2. Install [.Net Core SDK 3.1](https://dotnet.microsoft.com/download)
+3. Install [Dapr CLI](https://github.com/dapr/cli)
+4. Clone the git repository to download the sample
 ```
 git clone https://github.com/azure-octo/dapr-kafka-csharp.git
 ```
-2. Install docker
-3. Install .NET
 
 ## Running locally
 
@@ -71,6 +70,7 @@ dapr init --kubernetes
 
 5. Deploy the producer and consumer applications to Kubernetes
 ```
+kubectl apply -f ./deploy/kafka-pubsub.yaml
 kubectl apply -f ./deploy/producer.yaml
 kubectl apply -f ./deploy/consumer.yaml
 ```
