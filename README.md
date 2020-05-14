@@ -58,7 +58,15 @@ $ kubectl create ns kafka
 $ helm install dapr-kafka incubator/kafka -n kafka -f ./kafka-non-persistence.yaml
 ```
 
-3. Wait until kafka pods are running
+```
+helm repo add azure-marketplace https://marketplace.azurecr.io/helm/v1/repo
+helm install dapr-kafka azure-marketplace/kafka -n kafka -f ./kafka-non-persistence.yaml
+
+// uninstall
+helm uninstall dapr-kafka -n kafka
+```
+
+1. Wait until kafka pods are running
 ```
 $ kubectl get pods -n kafka -w
 NAME                     READY   STATUS    RESTARTS   AGE
@@ -68,12 +76,8 @@ dapr-kafka-zookeeper-1   1/1     Running   0          2m13s
 dapr-kafka-zookeeper-2   1/1     Running   0          109s
 ```
 
-4. Run Dapr in Kubernetes environment
-```
-dapr init --kubernetes
-```
+4. Install [Dapr in Kubernetes environment](https://github.com/dapr/docs/blob/master/getting-started/environment-setup.md#installing-dapr-on-a-kubernetes-cluster)
 
-TODO: add how to install dapr using helm
 
 5. Deploy the producer and consumer applications to Kubernetes
 ```
@@ -88,6 +92,14 @@ kubectl logs -f producer-567bf6fbfd-42zjf producer
 kubectl logs -f consumer-bcd4bb7b4-k2pvt consumer
 ```
 
-## Build and push docker image
+## Build and push docker image to your docker registry
 
-WIP.
+```sh
+docker build -t [docker_registery]/consumer:latest -f ./consumer/Dockerfile .
+docker build -t [docker_registery]/producer:latest -f ./producer/Dockerfile .
+
+docker push [docker_registery]/consumer:latest
+docker push [docker_registery]/producer:latest
+```
+
+update producer/consumer.yaml

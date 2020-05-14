@@ -3,14 +3,10 @@
 # Licensed under the MIT License.
 # ------------------------------------------------------------
 
-replicas: 1
+replicaCount: 1
 
 # Disable persistent storage
 persistence:
   enabled: false
 
-# Topic creation and configuration for sample
-topics:
-  - name: sampletopic
-    partitions: 1
-    replicationFactor: 1
+autoCreateTopicsEnable: true
