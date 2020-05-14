@@ -43,7 +43,13 @@ dapr run --app-id producer dotnet run
 
 ### Uninstall Kafka
 
-WIP.
+```
+Linux/MacOS:
+    docker ps | grep kafka
+Windows:
+    docker ps | findstr kafka
+docker stop [container ids for kafka]
+```
 
 ## Run in Kubernetes cluster
 
@@ -55,15 +61,8 @@ WIP.
 $ helm repo add incubator http://storage.googleapis.com/kubernetes-charts-incubator
 $ helm repo update
 $ kubectl create ns kafka
-$ helm install dapr-kafka incubator/kafka -n kafka -f ./kafka-non-persistence.yaml
-```
-
-```
-helm repo add azure-marketplace https://marketplace.azurecr.io/helm/v1/repo
-helm install dapr-kafka azure-marketplace/kafka -n kafka -f ./kafka-non-persistence.yaml
-
-// uninstall
-helm uninstall dapr-kafka -n kafka
+$ helm repo add azure-marketplace https://marketplace.azurecr.io/helm/v1/repo
+$ helm install dapr-kafka azure-marketplace/kafka -n kafka -f ./kafka-non-persistence.yaml
 ```
 
 1. Wait until kafka pods are running
@@ -95,11 +94,27 @@ kubectl logs -f consumer-bcd4bb7b4-k2pvt consumer
 ## Build and push docker image to your docker registry
 
 ```sh
-docker build -t [docker_registery]/consumer:latest -f ./consumer/Dockerfile .
-docker build -t [docker_registery]/producer:latest -f ./producer/Dockerfile .
+docker build -t [docker_registry]/consumer:latest -f ./consumer/Dockerfile .
+docker build -t [docker_registry]/producer:latest -f ./producer/Dockerfile .
 
-docker push [docker_registery]/consumer:latest
-docker push [docker_registery]/producer:latest
+docker push [docker_registry]/consumer:latest
+docker push [docker_registry]/producer:latest
 ```
 
-update producer/consumer.yaml
+update producer/consumer.yaml with the appropriate image name [docker_registry]/consumer:latest, [docker_registry]/producer:latest
+
+## Cleanup
+Stop the applications
+```
+kubectl delete -f ./deploy/kafka-pubsub.yaml
+kubectl delete -f ./deploy/consumer.yaml
+kubectl delete -f ./deploy/producer.yaml
+```
+Uninstall Kafka
+```
+helm uninstall dapr-kafka -n kafka
+```
+Uninstall Dapr
+```
+helm uninstall dapr -n dapr-system
+```
