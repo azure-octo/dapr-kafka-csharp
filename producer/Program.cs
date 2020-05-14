@@ -20,8 +20,8 @@ namespace Dapr.Examples.Pubsub.Producer
 
         static async Task StartMessageGeneratorAsync()
         {
-            DaprClientBuilder daprClientBuilder = new DaprClientBuilder();
-            DaprClient client = daprClientBuilder.Build();
+            var daprClientBuilder = new DaprClientBuilder();
+            var client = daprClientBuilder.Build();
 
             while (true)
             {
@@ -56,7 +56,7 @@ namespace Dapr.Examples.Pubsub.Producer
 
         static internal string GenerateRandomMessage()
         {
-            Random random = new Random();
+            var random = new Random();
             var HashTags = new string[]
             {
                 "circle",
