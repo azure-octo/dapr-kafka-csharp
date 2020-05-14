@@ -44,11 +44,7 @@ dapr run --app-id producer dotnet run
 ### Uninstall Kafka
 
 ```
-Linux/MacOS:
-    docker ps | grep kafka
-Windows:
-    docker ps | findstr kafka
-docker stop [container ids for kafka]
+docker-compose -f ./docker-compose-kafka.yml down
 ```
 
 ## Run in Kubernetes cluster
