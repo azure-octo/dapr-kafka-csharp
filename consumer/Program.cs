@@ -1,3 +1,8 @@
+// ------------------------------------------------------------
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+// ------------------------------------------------------------
+
 namespace Dapr.Examples.Pubsub.Consumer
 {
     using Microsoft.AspNetCore.Hosting;

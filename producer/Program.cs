@@ -1,11 +1,16 @@
-﻿using System;
-using System.Threading.Tasks;
-using Prometheus;
-using Dapr.Client;
-using Dapr.Examples.Pubsub.Models;
+﻿// ------------------------------------------------------------
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+// ------------------------------------------------------------
 
 namespace Dapr.Examples.Pubsub.Producer
 {
+    using Dapr.Client;
+    using Dapr.Examples.Pubsub.Models;
+
+    using System;
+    using System.Threading.Tasks;
+
     class Program
     {
         static async Task Main(string[] args)
