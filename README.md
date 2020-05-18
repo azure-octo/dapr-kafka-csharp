@@ -15,7 +15,7 @@ git clone https://github.com/azure-octo/dapr-kafka-csharp.git
 
 ### Run Kafka Docker Container Locally
 
-In order to run the Kafka bindings sample locally, you will run the [Kafka broker server](https://github.com/wurstmeister/kafka-docker) in a docker container on your machine.
+In order to run the Kafka bindings sample locally, you will run the [Kafka broker server](https://github.com/wurstmeister/kafka-docker) in a docker container on your machine. Make sure docker is running in Linux mode.
 
 1. Run `docker-compose -f ./docker-compose-kafka.yml up -d` to run the container locally
 2. Run `docker ps` to see the container running locally: 
@@ -51,8 +51,7 @@ docker-compose -f ./docker-compose-kafka.yml down
 
 ### Setting up a Kafka in Kubernetes
 
-1. Make sure that you installed helm tiller on your cluster
-2. Install Kafka via [incubator/kafka helm chart](https://github.com/helm/charts/tree/master/incubator/kafka)
+1. Install Kafka via [incubator/kafka helm chart](https://github.com/helm/charts/tree/master/incubator/kafka)
 ```
 $ helm repo add incubator http://storage.googleapis.com/kubernetes-charts-incubator
 $ helm repo update
@@ -61,7 +60,7 @@ $ helm repo add azure-marketplace https://marketplace.azurecr.io/helm/v1/repo
 $ helm install dapr-kafka azure-marketplace/kafka -n kafka -f ./kafka-non-persistence.yaml
 ```
 
-1. Wait until kafka pods are running
+2. Wait until kafka pods are running
 ```
 $ kubectl get pods -n kafka -w
 NAME                     READY   STATUS    RESTARTS   AGE
@@ -71,20 +70,20 @@ dapr-kafka-zookeeper-1   1/1     Running   0          2m13s
 dapr-kafka-zookeeper-2   1/1     Running   0          109s
 ```
 
-4. Install [Dapr in Kubernetes environment](https://github.com/dapr/docs/blob/master/getting-started/environment-setup.md#installing-dapr-on-a-kubernetes-cluster)
+3. Install [Dapr in Kubernetes environment](https://github.com/dapr/docs/blob/master/getting-started/environment-setup.md#installing-dapr-on-a-kubernetes-cluster)
 
 
-5. Deploy the producer and consumer applications to Kubernetes
+4. Deploy the producer and consumer applications to Kubernetes
 ```
 kubectl apply -f ./deploy/kafka-pubsub.yaml
 kubectl apply -f ./deploy/producer.yaml
 kubectl apply -f ./deploy/consumer.yaml
 ```
 
-6. Check the logs from producer and consumer:
+5. Check the logs from producer and consumer:
 ```
-kubectl logs -f producer-567bf6fbfd-42zjf producer
-kubectl logs -f consumer-bcd4bb7b4-k2pvt consumer
+kubectl logs -f -l app=producer -c producer
+kubectl logs -f -l app=consumer -c consumer
 ```
 
 ## Build and push docker image to your docker registry
