@@ -2,9 +2,10 @@
 
 ## Pre-requisites
 
-1. Install [Docker](https://www.docker.com/products/docker-desktop)
-2. Install [.Net Core SDK 3.1](https://dotnet.microsoft.com/download)
-3. Clone the sample repo
+1. [Install Docker](https://www.docker.com/products/docker-desktop)
+2. [Install Dapr CLI](https://github.com/dapr/docs/blob/master/getting-started/environment-setup.md#installing-dapr-cli)
+3. [Install .Net Core SDK 3.1](https://dotnet.microsoft.com/download)
+4 Clone the sample repo
 
 ```
 git clone https://github.com/azure-octo/dapr-kafka-csharp.git
@@ -14,8 +15,11 @@ git clone https://github.com/azure-octo/dapr-kafka-csharp.git
 
 ### Install Dapr in standalone mode
 
-1. [Install Dapr CLI](https://github.com/dapr/docs/blob/master/getting-started/environment-setup.md#installing-dapr-cli)
-2. [Install Dapr in standalone mode](https://github.com/dapr/docs/blob/master/getting-started/environment-setup.md#installing-dapr-in-standalone-mode)
+1. [Install Dapr in standalone mode](https://github.com/dapr/docs/blob/master/getting-started/environment-setup.md#installing-dapr-in-standalone-mode)
+
+```
+$ dapr init
+```
 
 ### Run Kafka Docker Container Locally
 
