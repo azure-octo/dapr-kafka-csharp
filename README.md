@@ -4,14 +4,18 @@
 
 1. Install [Docker](https://www.docker.com/products/docker-desktop)
 2. Install [.Net Core SDK 3.1](https://dotnet.microsoft.com/download)
-3. Install [Dapr CLI](https://github.com/dapr/cli)
-4. Clone the sample repo
+3. Clone the sample repo
 
 ```
 git clone https://github.com/azure-octo/dapr-kafka-csharp.git
 ```
 
 ## Running locally
+
+### Install Dapr in standalone mode
+
+1. [Install Dapr CLI](https://github.com/dapr/docs/blob/master/getting-started/environment-setup.md#installing-dapr-cli)
+2. [Install Dapr in standalone mode](https://github.com/dapr/docs/blob/master/getting-started/environment-setup.md#installing-dapr-in-standalone-mode)
 
 ### Run Kafka Docker Container Locally
 
@@ -21,10 +25,11 @@ In order to run the Kafka bindings sample locally, you will run the [Kafka broke
 2. Run `docker ps` to see the container running locally: 
 
 ```bash
-342d3522ca14        kafka-docker_kafka                      "start-kafka.sh"         14 hours ago        Up About
-a minute   0.0.0.0:9092->9092/tcp                               kafka-docker_kafka_1
-0cd69dbe5e65        wurstmeister/zookeeper                  "/bin/sh -c '/usr/sb…"   8 days ago          Up About
-a minute   22/tcp, 2888/tcp, 3888/tcp, 0.0.0.0:2181->2181/tcp   kafka-docker_zookeeper_1
+CONTAINER ID        IMAGE                           COMMAND                  CREATED             STATUS              PORTS                                                NAMES
+aaa142160487        wurstmeister/zookeeper:latest   "/bin/sh -c '/usr/sb…"   2 minutes ago       Up 2 minutes        22/tcp, 2888/tcp, 3888/tcp, 0.0.0.0:2181->2181/tcp   dapr-kafka-csharp_zookeeper_1
+0e3908026eda        wurstmeister/kafka:latest       "start-kafka.sh"         2 minutes ago       Up 2 minutes        0.0.0.0:9092->9092/tcp                               dapr-kafka-csharp_kafka_1
+c0c3ca47c0ad        daprio/dapr                     "./placement"            3 days ago          Up 32 hours         0.0.0.0:50005->50005/tcp                             dapr_placement
+c8eec02b4e5d        redis                           "docker-entrypoint.s…"   3 days ago          Up 32 hours         0.0.0.0:6379->6379/tcp                               dapr_redis
 ```
 
 ### Run Consumer app
@@ -49,6 +54,27 @@ docker-compose -f ./docker-compose-kafka.yml down
 
 ## Run in Kubernetes cluster
 
+### Install Dapr on Kubernetes
+
+```
+$ dapr init -k
+⌛  Making the jump to hyperspace...
+ℹ️  Note: this installation is recommended for testing purposes. For production environments, please use Helm 
+
+✅  Deploying the Dapr control plane to your cluster...
+✅  Success! Dapr has been installed. To verify, run 'kubectl get pods -w' or 'dapr status -k' in your terminal. To get started, go here: https://aka.ms/dapr-getting-started
+
+$ kubectl get pods -w
+NAME                                     READY   STATUS    RESTARTS   AGE
+dapr-operator-6bdc6f95c6-g67p2           1/1     Running   0          37s
+dapr-placement-fb75fb85-k6m7d            1/1     Running   0          37s
+dapr-sentry-6f796dd4cb-rh9qx             1/1     Running   0          37s
+dapr-sidecar-injector-7bc488df76-jg6fw   1/1     Running   0          37s
+```
+
+> For more detail, refer to [Dapr in Kubernetes environment](https://github.com/dapr/docs/blob/master/getting-started/environment-setup.md#installing-dapr-on-a-kubernetes-cluster) for more detail.
+> For helm users, please refer to [this](https://github.com/dapr/docs/blob/master/getting-started/environment-setup.md#using-helm-advanced).
+
 ### Setting up a Kafka in Kubernetes
 
 1. Install Kafka via [incubator/kafka helm chart](https://github.com/helm/charts/tree/master/incubator/kafka)
@@ -70,17 +96,14 @@ dapr-kafka-zookeeper-1   1/1     Running   0          2m13s
 dapr-kafka-zookeeper-2   1/1     Running   0          109s
 ```
 
-3. Install [Dapr in Kubernetes environment](https://github.com/dapr/docs/blob/master/getting-started/environment-setup.md#installing-dapr-on-a-kubernetes-cluster)
-
-
-4. Deploy the producer and consumer applications to Kubernetes
+3. Deploy the producer and consumer applications to Kubernetes
 ```
 kubectl apply -f ./deploy/kafka-pubsub.yaml
 kubectl apply -f ./deploy/producer.yaml
 kubectl apply -f ./deploy/consumer.yaml
 ```
 
-5. Check the logs from producer and consumer:
+4. Check the logs from producer and consumer:
 ```
 kubectl logs -f -l app=producer -c producer
 kubectl logs -f -l app=consumer -c consumer
@@ -88,28 +111,39 @@ kubectl logs -f -l app=consumer -c consumer
 
 ## Build and push docker image to your docker registry
 
+1. Create your docker hub account or use your own docker registry
+
+2. Build Docker images.
 ```sh
 docker build -t [docker_registry]/consumer:latest -f ./consumer/Dockerfile .
 docker build -t [docker_registry]/producer:latest -f ./producer/Dockerfile .
+```
 
+3. Push Docker images.
+```sh
 docker push [docker_registry]/consumer:latest
 docker push [docker_registry]/producer:latest
 ```
 
-update producer/consumer.yaml with the appropriate image name [docker_registry]/consumer:latest, [docker_registry]/producer:latest
+4. Update image names
+  * Update imagename to [docker_registry]/consumer:latest in [deploy/consumer.yaml](https://github.com/azure-octo/dapr-kafka-csharp/blob/master/deploy/consumer.yaml#L39)
+  * Update imagename to [docker_registry]/producer:latest in [deploy/producer.yaml](https://github.com/azure-octo/dapr-kafka-csharp/blob/master/deploy/producer.yaml#L23)
 
 ## Cleanup
-Stop the applications
+
+1. Stop the applications
 ```
 kubectl delete -f ./deploy/kafka-pubsub.yaml
 kubectl delete -f ./deploy/consumer.yaml
 kubectl delete -f ./deploy/producer.yaml
 ```
-Uninstall Kafka
+
+2. Uninstall Kafka
 ```
 helm uninstall dapr-kafka -n kafka
 ```
-Uninstall Dapr
+
+3. Uninstall Dapr
 ```
-helm uninstall dapr -n dapr-system
+dapr uninstall -k
 ```
