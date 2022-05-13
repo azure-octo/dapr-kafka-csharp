@@ -60,7 +60,7 @@ namespace Dapr.Examples.Pubsub.Consumer
                 endpoints.MapSubscribeHandler();
 
                 // Register the delegate to consume the messages from "sampletopic" topic
-                endpoints.MapPost("sampletopic", this.ConsumeMessage).WithTopic("sampletopic");
+                endpoints.MapPost("sampletopic", this.ConsumeMessage).WithTopic("pubsub", "sampletopic");
             });
         }
 
