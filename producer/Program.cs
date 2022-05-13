@@ -26,11 +26,13 @@ namespace Dapr.Examples.Pubsub.Producer
             while (true)
             {
                 var message = GenerateNewMessage();
-                Console.WriteLine("Publishing: {0}", message);
 
                 try
                 {
-                    await client.PublishEventAsync<SampleMessage>("sampletopic", message);
+                    Console.WriteLine("Publishing: {0}", message);
+                    await client.PublishEventAsync<SampleMessage>("pubsub","sampletopic", message);
+                    Console.WriteLine("Publishing: Controller Message");
+                    await client.PublishEventAsync<string>("pubsub","secondsampletopic", "Second Sample Topic");
                 }
                 catch (Exception ex)
                 {
