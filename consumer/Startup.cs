@@ -37,7 +37,7 @@ namespace Dapr.Examples.Pubsub.Consumer
         public void ConfigureServices(IServiceCollection services)
         {
             // Enable Dapr Client
-            services.AddDaprClient();
+            services.AddControllers().AddDapr();
             services.AddSingleton(serializerOptions);
         }
 
@@ -56,6 +56,7 @@ namespace Dapr.Examples.Pubsub.Consumer
             
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapControllers();
                 // Register Subscribe Handlers
                 endpoints.MapSubscribeHandler();
 
