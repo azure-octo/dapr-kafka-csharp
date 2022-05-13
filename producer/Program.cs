@@ -30,7 +30,7 @@ namespace Dapr.Examples.Pubsub.Producer
 
                 try
                 {
-                    await client.PublishEventAsync<SampleMessage>("sampletopic", message);
+                    await client.PublishEventAsync<SampleMessage>("pubsub","sampletopic", message);
                 }
                 catch (Exception ex)
                 {
